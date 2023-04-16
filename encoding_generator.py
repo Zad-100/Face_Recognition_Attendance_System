@@ -13,7 +13,7 @@ firebase_admin.initialize_app(cred, {
 })
 
 
-# Importing student images
+# Import student images
 studentImgFolderPath = 'Images'
 studentImgNameList = os.listdir(studentImgFolderPath)
 studentImgList = []
@@ -23,15 +23,13 @@ for imgName in studentImgNameList:
                                                     imgName)))
     studentIDList.append(os.path.splitext(imgName)[0])
 
-    # Sending the images to the firebase database
+    # Send the images to the firebase database
     # image_path stores the path of each particular image
     image_path = f"{studentImgFolderPath}/{imgName}"
     bucket = storage.bucket()
     blob = bucket.blob(image_path)
     blob.upload_from_filename(image_path)
-
-# print(studentImgNameList)
-# print(studentIDList)
+# end for
 
 
 def findEncodings(imgList):
@@ -47,19 +45,18 @@ def findEncodings(imgList):
     return(encodingList)
 # end function findEncodings()
 
-# Creating encodings of the "known" faces (i. e., the faces already saved
+# Create encodings of the "known" faces (i. e., the faces already saved
 # in the database)
 print("Encoding Started (for known faces)...")
 known_EncodingList = findEncodings(studentImgList) # function call
 print("Encoding Successful!")
-# print(known_EncodingList)
 
 
 # Save the encodings with their respective IDs in a pickle file
 # so that it can be imported in main.py
 known_EncodingWithIDsList = [known_EncodingList, studentIDList]
 
-# Creating a file where pickle file is to be dumped
+# Create a file where pickle file is to be dumped
 print("Saving the encodings in file...")
 file = open("encoding_with_IDs.p", "wb")
 pickle.dump(known_EncodingWithIDsList, file)
