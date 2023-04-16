@@ -1,0 +1,32 @@
+{
+	"B420004":
+	{
+		"name": "Akash Parida",
+		"department": "IT",
+		"class_of": 2024,
+		"total_attendance": 17,
+		"grade": "A",
+		"semester": "6",
+		"last_attendance_time": "2023-04-11 13:54:34"
+	},
+	"B420037":
+	{
+		"name": "Priyanshu",
+		"department": "IT",
+		"total_attendance": 19,	
+		"grade": "A",
+		"class_of": 2024,
+		"semester": "6",
+		"last_attendance_time": "2023-04-11 13:54:34"
+	},
+	"B420043":
+	{
+		"name": "Sailesh Agarwal",
+		"department": "IT",
+		"total_attendance": 16,
+		"grade": "A",
+		"class_of": 2024,
+		"semester": "6",
+		"last_attendance_time": "2023-04-11 13:54:34"
+	}
+}
