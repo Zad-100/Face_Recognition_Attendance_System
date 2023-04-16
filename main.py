@@ -1,5 +1,17 @@
 import os
 import cv2
+import firebase_admin
+from firebase_admin import credentials, db
+from firebase_admin import storage
+from datetime import datetime as dt
+
+cred = credentials.Certificate("facial-recog-attendance-firebase-adminsdk-m0o07-0b6db63d1f.json")
+firebase_admin.initialize_app(cred, {
+    "databaseURL" : "https://facial-recog-attendance-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    "storageBucket" : "facial-recog-attendance.appspot.com"
+})
+# Creating a storage bucket
+bucket = storage.bucket()
 
 # To test the web-cam
 capture = cv2.VideoCapture(0)
@@ -26,6 +38,9 @@ known_encodingList, studentIDList = known_encodingWithIDsList
 print("Loaded encodings successfully!")
 
 modeType = 0 # the current state of the attendance cam
+frameCount = 0 # to track number of frames captured and time to be waited out
+studentID = -1 # initialising the student id whose face matched
+studentImgList = []
 while True:
     success, img = capture.read()
     
@@ -71,6 +86,16 @@ while True:
                 print("New face detected (not in database)")
             # end if-else
         # end for
+
+        if frameCount != 0:
+            # Downloading data in first frame captured
+            if frameCount == 1:
+                studentInfo = db.reference(f'Students/{studentID}').get()
+
+                # Get image of the matched face from the database
+                blob = bucket.get_blob(f'Images/{studentID}.png')
+                array = np.frombuffer(blob.download_as_string(), np.uint8)
+                imgStudent = cv2.imdecode(array, cv2.COLOR_BGRA2BGR)
 
     cv2.imshow("Face Attendance Cam Activated", imgBackground)
     cv2.waitKey(1)
